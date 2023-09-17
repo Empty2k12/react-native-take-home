@@ -6,7 +6,7 @@ interface ResponsiveTextProps {
   text: string;
   style?: TextStyle;
   elipsisWidth?: number;
-  Colors?: any; // You might want to specify a more specific type for Colors
+  Colors?: any;
   onPress?: () => void;
   numberOfLines?: number;
 }
@@ -27,7 +27,7 @@ const ResponsiveText: React.FC<ResponsiveTextProps> = ({
       style={[
         {
           maxWidth: elipsisWidth ? elipsisWidth : undefined,
-          color: 'black', // You might want to use Colors here
+          color: 'black',
           fontSize: typography.size_normal,
         },
         style,

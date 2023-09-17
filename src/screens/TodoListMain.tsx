@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import Modal from 'react-native-modal';
 import {
   heightPercentageToDP as hp,
@@ -9,7 +9,7 @@ import Header from '../components/Header';
 import ModalContent from '../components/ModalContent';
 import TodoCard from '../components/TodoCard';
 import APIHandler from '../helpers/ApiHandler';
-import { Colors } from '../helpers/Theme';
+import {Colors} from '../helpers/Theme';
 
 interface Todo {
   userId: number;
@@ -29,16 +29,19 @@ const TodoListMain: React.FC = () => {
   const [inCompleteTaskList, setInCompleteTaskList] = useState<Todo[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>('All');
   const [userList, setUserList] = useState<User[]>([]);
-  const [isFilterModalVisible, setIsFilterModalVisible] = useState<boolean>(
-    false
-  );
+  const [isFilterModalVisible, setIsFilterModalVisible] =
+    useState<boolean>(false);
 
   const fetchTodosList = async () => {
     try {
       const res = await APIHandler('get', 'todos');
       setTodoList(res);
-      const completeTasks = res.filter((i: { completed: boolean; }) => i.completed === true);
-      const inCompleteTasks = res.filter((i: { completed: boolean; }) => i.completed === false);
+      const completeTasks = res.filter(
+        (i: {completed: boolean}) => i.completed === true,
+      );
+      const inCompleteTasks = res.filter(
+        (i: {completed: boolean}) => i.completed === false,
+      );
       setCompletedTaskList(completeTasks);
       setInCompleteTaskList(inCompleteTasks);
     } catch (err) {
@@ -68,11 +71,11 @@ const TodoListMain: React.FC = () => {
     } else if (selectedOption === 'Incompleted') {
       return inCompleteTaskList;
     }
-    return todoList; 
+    return todoList;
   };
 
   const getUserName = (userId: number) => {
-    const user = userList.find((user) => user.id === userId);
+    const user = userList.find(user => user.id === userId);
     return user ? user.name : 'Unknown User';
   };
 
@@ -82,17 +85,20 @@ const TodoListMain: React.FC = () => {
         onBackdropPress={() => setIsFilterModalVisible(false)}
         isVisible={isFilterModalVisible}
         style={styles.modalContainer}>
-          <ModalContent completedOnpress={() => {
-          setSelectedOption('Completed');
-          setIsFilterModalVisible(false);
-        } } inCompletedOnPress={() => {
-          setSelectedOption('Incompleted');
-          setIsFilterModalVisible(false);
-        } } allTaskOnpress={() => {
-          setSelectedOption('All');
-          setIsFilterModalVisible(false);
-        } }  />
-     
+        <ModalContent
+          completedOnpress={() => {
+            setSelectedOption('Completed');
+            setIsFilterModalVisible(false);
+          }}
+          inCompletedOnPress={() => {
+            setSelectedOption('Incompleted');
+            setIsFilterModalVisible(false);
+          }}
+          allTaskOnpress={() => {
+            setSelectedOption('All');
+            setIsFilterModalVisible(false);
+          }}
+        />
       </Modal>
       <Header
         title={'To-do List'}
@@ -100,14 +106,17 @@ const TodoListMain: React.FC = () => {
         filterOnPress={() => setIsFilterModalVisible(true)}
       />
       <View style={styles.listContainer}>
-        <View style={{ height: hp(3) }}></View>
+        <View style={{height: hp(3)}}></View>
         <FlatList
           contentContainerStyle={styles.flatListContainer}
           nestedScrollEnabled
           data={applyFilter()}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
-              <TodoCard todoListData={item} userName={getUserName(item.userId)} />
+              <TodoCard
+                todoListData={item}
+                userName={getUserName(item.userId)}
+              />
             );
           }}
         />
@@ -121,7 +130,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.header_color,
   },
-
   modalContainer: {
     flexDirection: 'row',
     height: hp(100),

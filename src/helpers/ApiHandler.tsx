@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, {AxiosResponse, AxiosError} from 'axios';
 import axiosRetry from 'axios-retry';
 
 const baseURL = 'https://jsonplaceholder.typicode.com/';
@@ -37,7 +37,7 @@ async function APIHandler(type: 'post' | 'get', ending: string): Promise<any> {
       const axiosError: AxiosError = error;
 
       if (axiosError.response) {
-        const { status } = axiosError.response;
+        const {status} = axiosError.response;
 
         if (status === 400) {
           console.error('Bad arguments (Wrong input)');
@@ -45,11 +45,11 @@ async function APIHandler(type: 'post' | 'get', ending: string): Promise<any> {
           console.error('Unauthorized (login again or not authorized)');
         } else if (status === 500) {
           console.error('Server error');
-        } 
+        }
       } else {
         console.error('Timeout (Retry again later)');
       }
-    } 
+    }
 
     throw error;
   }

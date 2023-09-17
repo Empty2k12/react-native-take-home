@@ -1,17 +1,16 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import {
-  widthPercentageToDP as wp
-} from 'react-native-responsive-screen';
+import {StyleSheet, View} from 'react-native';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import CheckIcon from 'react-native-vector-icons/Feather';
 import CrossIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Octicons';
+import {Colors} from '../helpers/Theme';
 import ResponsiveText from './ResponsiveText';
 
 interface TodoCardProps {
   todoListData: {
-    title: string,
-    completed: boolean,
+    title: string;
+    completed: boolean;
   };
   userName: string;
 }
@@ -47,8 +46,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(2),
     paddingVertical: wp(1),
     width: wp(94),
-    backgroundColor: '#fff',
-    borderColor: '#000000',
+    backgroundColor: Colors.todo_card_color,
     borderWidth: 0,
     shadowOpacity: 0.2,
     shadowRadius: 3,

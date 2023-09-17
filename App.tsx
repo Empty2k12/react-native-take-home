@@ -1,24 +1,22 @@
 import React from 'react';
-import {
-  LogBox,
-  SafeAreaView,
-  StatusBar,
-  useColorScheme
-} from 'react-native';
+import {LogBox, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import TodoListMain from './src/screens/TodoListMain';
+import {Colors} from './src/helpers/Theme';
 
 const App: React.FC = () => {
   LogBox.ignoreAllLogs();
-  const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#2A5C99'}}>
-      <StatusBar barStyle={'light-content'} />
+    <SafeAreaView style={styles.safeAreaView}>
+      <StatusBar barStyle="light-content" />
       <TodoListMain />
     </SafeAreaView>
   );
 };
-
-
-
+const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: Colors.statusbar_color,
+  },
+});
 export default App;
