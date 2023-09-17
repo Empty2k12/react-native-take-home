@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import Header from '../components/Header';
-import ResponsiveText from '../components/ResponsiveText';
+import ModalContent from '../components/ModalContent';
 import TodoCard from '../components/TodoCard';
 import APIHandler from '../helpers/ApiHandler';
 import { Colors } from '../helpers/Theme';
-import { typography } from '../helpers/Typograpgy';
 
 interface Todo {
   userId: number;
@@ -69,7 +68,7 @@ const TodoListMain: React.FC = () => {
     } else if (selectedOption === 'Incompleted') {
       return inCompleteTaskList;
     }
-    return todoList; // Default to show all if none of the above matches
+    return todoList; 
   };
 
   const getUserName = (userId: number) => {
@@ -83,38 +82,17 @@ const TodoListMain: React.FC = () => {
         onBackdropPress={() => setIsFilterModalVisible(false)}
         isVisible={isFilterModalVisible}
         style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedOption('Completed');
-              setIsFilterModalVisible(false);
-            }}
-            style={styles.modalOption}>
-            <ResponsiveText
-              text={'Completed Tasks'}
-              style={styles.modalOptionText}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedOption('Incompleted');
-              setIsFilterModalVisible(false);
-            }}
-            style={styles.modalOption}>
-            <ResponsiveText
-              text={'Incompleted Tasks'}
-              style={styles.modalOptionText}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedOption('All');
-              setIsFilterModalVisible(false);
-            }}
-            style={styles.modalOption}>
-            <ResponsiveText text={'Cancel'} style={styles.modalOptionText} />
-          </TouchableOpacity>
-        </View>
+          <ModalContent completedOnpress={() => {
+          setSelectedOption('Completed');
+          setIsFilterModalVisible(false);
+        } } inCompletedOnPress={() => {
+          setSelectedOption('Incompleted');
+          setIsFilterModalVisible(false);
+        } } allTaskOnpress={() => {
+          setSelectedOption('All');
+          setIsFilterModalVisible(false);
+        } }  />
+     
       </Modal>
       <Header
         title={'To-do List'}
@@ -150,24 +128,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
   },
-  modalContent: {
-    height: hp(20),
-    width: wp(100),
-    borderRadius: wp(4),
-    backgroundColor: 'white',
-    alignSelf: 'flex-end',
-  },
-  modalOption: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomColor: 'black',
-    borderBottomWidth: wp(0.15),
-  },
-  modalOptionText: {
-    fontSize: typography.size_normal,
-    fontWeight: '500',
-  },
+
   listContainer: {
     borderTopRightRadius: wp(7),
     backgroundColor: 'white',
