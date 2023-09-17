@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   heightPercentageToDP as hp,
@@ -9,40 +9,51 @@ import Header from '../components/Header';
 import ResponsiveText from '../components/ResponsiveText';
 import TodoCard from '../components/TodoCard';
 import APIHandler from '../helpers/ApiHandler';
-import {Colors} from '../helpers/Theme';
-import {typography} from '../helpers/Typograpgy';
-const TodoListMain = () => {
-  const [todoList, setTodoList] = useState([]);
-  const [completedTaskList, setCompletedTaskList] = useState([]);
-  const [inCompleteTaskList, setInCompleteTaskList] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('All');
-  const [userList, setUserList] = useState([]);
-  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+import { Colors } from '../helpers/Theme';
+import { typography } from '../helpers/Typograpgy';
+
+interface Todo {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+interface User {
+  id: number;
+  name: string;
+}
+
+const TodoListMain: React.FC = () => {
+  const [todoList, setTodoList] = useState<Todo[]>([]);
+  const [completedTaskList, setCompletedTaskList] = useState<Todo[]>([]);
+  const [inCompleteTaskList, setInCompleteTaskList] = useState<Todo[]>([]);
+  const [selectedOption, setSelectedOption] = useState<string>('All');
+  const [userList, setUserList] = useState<User[]>([]);
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState<boolean>(
+    false
+  );
 
   const fetchTodosList = async () => {
-    APIHandler('get', 'todos')
-      .then(res => {
-        setTodoList(res);
-        const completeTasks = res.filter(i => i.completed === true).map(e => e);
-        const inCompleteTasks = res
-          .filter(i => i.completed === false)
-          .map(e => e);
-        setCompletedTaskList(completeTasks);
-        setInCompleteTaskList(inCompleteTasks);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      const res = await APIHandler('get', 'todos');
+      setTodoList(res);
+      const completeTasks = res.filter((i: { completed: boolean; }) => i.completed === true);
+      const inCompleteTasks = res.filter((i: { completed: boolean; }) => i.completed === false);
+      setCompletedTaskList(completeTasks);
+      setInCompleteTaskList(inCompleteTasks);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const fetchUsers = async () => {
-    APIHandler('get', 'users')
-      .then(res => {
-        setUserList(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      const res = await APIHandler('get', 'users');
+      setUserList(res);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -58,10 +69,11 @@ const TodoListMain = () => {
     } else if (selectedOption === 'Incompleted') {
       return inCompleteTaskList;
     }
+    return todoList; // Default to show all if none of the above matches
   };
 
-  const getUserName = userId => {
-    const user = userList.find(user => user.id === userId);
+  const getUserName = (userId: number) => {
+    const user = userList.find((user) => user.id === userId);
     return user ? user.name : 'Unknown User';
   };
 
@@ -110,17 +122,14 @@ const TodoListMain = () => {
         filterOnPress={() => setIsFilterModalVisible(true)}
       />
       <View style={styles.listContainer}>
-        <View style={{height: hp(3)}}></View>
+        <View style={{ height: hp(3) }}></View>
         <FlatList
           contentContainerStyle={styles.flatListContainer}
           nestedScrollEnabled
           data={applyFilter()}
-          renderItem={({item}) => {
+          renderItem={({ item }) => {
             return (
-              <TodoCard
-                todoListData={item}
-                userName={getUserName(item.userId)}
-              />
+              <TodoCard todoListData={item} userName={getUserName(item.userId)} />
             );
           }}
         />

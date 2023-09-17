@@ -1,15 +1,22 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
+  widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
-import ResponsiveText from './ResponsiveText';
-import Icon from 'react-native-vector-icons/Octicons';
 import CheckIcon from 'react-native-vector-icons/Feather';
 import CrossIcon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Octicons';
+import ResponsiveText from './ResponsiveText';
 
-const TodoCard = ({todoListData, userName}) => {
+interface TodoCardProps {
+  todoListData: {
+    title: string,
+    completed: boolean,
+  };
+  userName: string;
+}
+
+const TodoCard: React.FC<TodoCardProps> = ({todoListData, userName}) => {
   return (
     <View style={styles.mainView}>
       <ResponsiveText text={todoListData?.title} style={styles.todoText} />
@@ -19,14 +26,14 @@ const TodoCard = ({todoListData, userName}) => {
           <ResponsiveText text={userName} style={styles.italicText} />
         </View>
         <View style={styles.secondRow}>
-          {todoListData.completed == true ? (
+          {todoListData.completed === true ? (
             <CheckIcon size={22} name={'check-circle'} style={styles.icon} />
           ) : (
             <CrossIcon size={22} name={'close'} style={styles.icon} />
           )}
 
           <ResponsiveText
-            text={todoListData.completed == true ? 'Complete' : 'Incomplete'}
+            text={todoListData.completed === true ? 'Complete' : 'Incomplete'}
             style={styles.italicText}
           />
         </View>

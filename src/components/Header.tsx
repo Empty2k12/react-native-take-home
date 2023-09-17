@@ -1,15 +1,22 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {typography} from '../helpers/Typograpgy';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { typography } from '../helpers/Typograpgy';
 import FilterIcon from 'react-native-vector-icons/Feather';
 import TodoListIcon from 'react-native-vector-icons/Octicons';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {Colors} from '../helpers/Theme';
+import { Colors } from '../helpers/Theme';
 import ResponsiveText from './ResponsiveText';
-const Header = ({title, filterStatus, filterOnPress}) => {
+
+interface HeaderProps {
+  title: string;
+  filterStatus: string;
+  filterOnPress: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ title, filterStatus, filterOnPress }) => {
   return (
     <View style={styles.header}>
       <TodoListIcon name={'checklist'} size={26} color={'white'} />
@@ -24,6 +31,7 @@ const Header = ({title, filterStatus, filterOnPress}) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
@@ -53,4 +61,5 @@ const styles = StyleSheet.create({
     bottom: wp(3.8),
   },
 });
+
 export default Header;

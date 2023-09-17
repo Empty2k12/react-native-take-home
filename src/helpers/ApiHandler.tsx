@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import axiosRetry from 'axios-retry';
+
 const baseURL = 'https://jsonplaceholder.typicode.com/';
 
 axiosRetry(axios, {
@@ -12,15 +13,19 @@ axiosRetry(axios, {
   },
 });
 
-async function APIHandler(type, ending) {
+async function APIHandler(type: 'post' | 'get', ending: string): Promise<any> {
   try {
     if (type.toLowerCase() === 'post') {
-      const response = await axios.post(`${baseURL}${ending}`, null, {
-        withCredentials: true,
-      });
+      const response: AxiosResponse = await axios.post(
+        `${baseURL}${ending}`,
+        null,
+        {
+          withCredentials: true,
+        },
+      );
       return response.data;
     } else if (type.toLowerCase() === 'get') {
-      const response = await axios.get(`${baseURL}${ending}`);
+      const response: AxiosResponse = await axios.get(`${baseURL}${ending}`);
       return response.data;
     } else {
       throw new Error('Invalid request type');
