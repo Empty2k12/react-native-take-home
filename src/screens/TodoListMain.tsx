@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View,NativeModules, Button} from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  NativeModules,
+  Button,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import {
   heightPercentageToDP as hp,
@@ -24,7 +32,7 @@ interface User {
 }
 
 const TodoListMain: React.FC = () => {
-  const { LocalNotificationManager } = NativeModules;
+  const {LocalNotificationManager} = NativeModules;
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [completedTaskList, setCompletedTaskList] = useState<Todo[]>([]);
   const [inCompleteTaskList, setInCompleteTaskList] = useState<Todo[]>([]);
@@ -32,7 +40,11 @@ const TodoListMain: React.FC = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const [isFilterModalVisible, setIsFilterModalVisible] =
     useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
   const fetchTodosList = async () => {
+    setIsLoading(true);
     try {
       const res = await APIHandler('get', 'todos');
       setTodoList(res);
@@ -46,6 +58,8 @@ const TodoListMain: React.FC = () => {
       setInCompleteTaskList(inCompleteTasks);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,6 +93,12 @@ const TodoListMain: React.FC = () => {
     return user ? user.name : 'Unknown User';
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchTodosList();
+    setIsRefreshing(false);
+  };
+
   return (
     <View style={styles.container}>
       <Modal
@@ -105,29 +125,33 @@ const TodoListMain: React.FC = () => {
         filterStatus={selectedOption}
         filterOnPress={() => setIsFilterModalVisible(true)}
       />
-             <Button  title='Local' onPress={() => {
-            LocalNotificationManager.scheduleNotification({
-              title: "My Notification",
-              body: "This is a local notification",
-            })
-             
-          }} />
       <View style={styles.listContainer}>
         <View style={{height: hp(3)}}></View>
-        <FlatList
-          contentContainerStyle={styles.flatListContainer}
-          nestedScrollEnabled
-          data={applyFilter()}
-          renderItem={({item}) => {
-            return (
-              <TodoCard
-                todoListData={item}
-                userName={getUserName(item.userId)}
+        {isLoading ? (
+          <ActivityIndicator size="large" color={Colors.loader_color} />
+        ) : (
+          <FlatList
+            contentContainerStyle={styles.flatListContainer}
+            nestedScrollEnabled
+            data={applyFilter()}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={handleRefresh}
+                colors={[Colors.loader_color]}
+                tintColor={Colors.loader_color}
               />
-            );
-          }}
-        />
- 
+            }
+            renderItem={({item}) => {
+              return (
+                <TodoCard
+                  todoListData={item}
+                  userName={getUserName(item.userId)}
+                />
+              );
+            }}
+          />
+        )}
       </View>
     </View>
   );
@@ -156,7 +180,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: wp(7),
     backgroundColor: 'white',
     borderTopLeftRadius: wp(7),
-    paddingBottom: wp(32),
+    paddingBottom: wp(36),
   },
 });
 

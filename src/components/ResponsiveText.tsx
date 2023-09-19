@@ -7,7 +7,6 @@ interface ResponsiveTextProps {
   style?: TextStyle;
   elipsisWidth?: number;
   Colors?: any;
-  onPress?: () => void;
   numberOfLines?: number;
 }
 
@@ -15,7 +14,7 @@ const ResponsiveText: React.FC<ResponsiveTextProps> = ({
   text,
   style,
   elipsisWidth,
-  onPress,
+
   numberOfLines,
 }) => {
   return (
@@ -23,7 +22,6 @@ const ResponsiveText: React.FC<ResponsiveTextProps> = ({
       ellipsizeMode={elipsisWidth ? 'tail' : undefined}
       allowFontScaling={false}
       numberOfLines={elipsisWidth ? 1 : numberOfLines}
-      onPress={onPress}
       style={[
         {
           maxWidth: elipsisWidth ? elipsisWidth : undefined,
