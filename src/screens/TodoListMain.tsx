@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View,NativeModules, Button} from 'react-native';
 import Modal from 'react-native-modal';
 import {
   heightPercentageToDP as hp,
@@ -24,6 +24,7 @@ interface User {
 }
 
 const TodoListMain: React.FC = () => {
+  const { LocalNotificationManager } = NativeModules;
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [completedTaskList, setCompletedTaskList] = useState<Todo[]>([]);
   const [inCompleteTaskList, setInCompleteTaskList] = useState<Todo[]>([]);
@@ -105,6 +106,14 @@ const TodoListMain: React.FC = () => {
         filterStatus={selectedOption}
         filterOnPress={() => setIsFilterModalVisible(true)}
       />
+             <Button  title='Local' onPress={() => {
+            LocalNotificationManager.scheduleNotification({
+              title: "My Notification",
+              body: "This is a local notification",
+            })
+              .then((response) => console.log(response))
+              .catch((error) => console.error(error));
+          }} />
       <View style={styles.listContainer}>
         <View style={{height: hp(3)}}></View>
         <FlatList
@@ -120,6 +129,7 @@ const TodoListMain: React.FC = () => {
             );
           }}
         />
+ 
       </View>
     </View>
   );
