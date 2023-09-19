@@ -32,7 +32,6 @@ const TodoListMain: React.FC = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const [isFilterModalVisible, setIsFilterModalVisible] =
     useState<boolean>(false);
-
   const fetchTodosList = async () => {
     try {
       const res = await APIHandler('get', 'todos');
@@ -111,8 +110,7 @@ const TodoListMain: React.FC = () => {
               title: "My Notification",
               body: "This is a local notification",
             })
-              .then((response) => console.log(response))
-              .catch((error) => console.error(error));
+             
           }} />
       <View style={styles.listContainer}>
         <View style={{height: hp(3)}}></View>
