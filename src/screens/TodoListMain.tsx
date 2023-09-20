@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
+  NativeModules,
+  Platform,
+  RefreshControl,
   StyleSheet,
   View,
-  NativeModules,
-  Button,
-  ActivityIndicator,
-  RefreshControl,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {
@@ -42,7 +42,6 @@ const TodoListMain: React.FC = () => {
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-
   const fetchTodosList = async () => {
     setIsLoading(true);
     try {
@@ -99,27 +98,36 @@ const TodoListMain: React.FC = () => {
     setIsRefreshing(false);
   };
 
+  useEffect(() => {
+    if (Platform.OS == 'ios') {
+      const scheduleNotificationForTodo = (
+        todo: Todo,
+        notificationDate: Date,
+      ) => {
+        LocalNotificationManager.scheduleNotification({
+          title: 'Todo Reminder',
+          body: todo.title,
+          notificationId: todo.id.toString(),
+          date: notificationDate.getTime(),
+        });
+      };
+
+      let initialDelay = 1 * 60 * 1000;
+
+      todoList.forEach(todo => {
+        setTimeout(() => {
+          const notificationDate = new Date();
+          scheduleNotificationForTodo(todo, notificationDate);
+        }, initialDelay);
+
+        initialDelay += 1 * 60 * 1000;
+      });
+    }
+    return () => {};
+  }, [todoList]);
+
   return (
     <View style={styles.container}>
-      <Modal
-        onBackdropPress={() => setIsFilterModalVisible(false)}
-        isVisible={isFilterModalVisible}
-        style={styles.modalContainer}>
-        <ModalContent
-          completedOnpress={() => {
-            setSelectedOption('Completed');
-            setIsFilterModalVisible(false);
-          }}
-          inCompletedOnPress={() => {
-            setSelectedOption('Incompleted');
-            setIsFilterModalVisible(false);
-          }}
-          allTaskOnpress={() => {
-            setSelectedOption('All');
-            setIsFilterModalVisible(false);
-          }}
-        />
-      </Modal>
       <Header
         title={'To-do List'}
         filterStatus={selectedOption}
@@ -153,6 +161,25 @@ const TodoListMain: React.FC = () => {
           />
         )}
       </View>
+      <Modal
+        onBackdropPress={() => setIsFilterModalVisible(false)}
+        isVisible={isFilterModalVisible}
+        style={styles.modalContainer}>
+        <ModalContent
+          completedOnpress={() => {
+            setSelectedOption('Completed');
+            setIsFilterModalVisible(false);
+          }}
+          inCompletedOnPress={() => {
+            setSelectedOption('Incompleted');
+            setIsFilterModalVisible(false);
+          }}
+          allTaskOnpress={() => {
+            setSelectedOption('All');
+            setIsFilterModalVisible(false);
+          }}
+        />
+      </Modal>
     </View>
   );
 };
