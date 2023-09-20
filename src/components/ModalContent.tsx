@@ -45,15 +45,15 @@ const ModalContent: React.FC<ModalContentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: wp(4),
+    borderRadius: wp(1),
     backgroundColor: 'transparent',
     alignSelf: 'flex-end',
-    paddingVertical: wp(1),
+
   },
   modalContent: {
     height: hp(12),
     width: wp(97),
-    borderRadius: wp(4),
+    borderRadius: wp(1),
     backgroundColor: 'white',
     alignSelf: 'flex-end',
   },
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
     backgroundColor: 'white',
-    borderRadius: wp(4),
-    marginTop: wp(4),
+    borderRadius: wp(1),
+    marginTop: wp(1),
   },
   modalOptionText: {
     fontSize: typography.size_normal,
