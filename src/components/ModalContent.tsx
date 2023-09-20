@@ -48,11 +48,10 @@ const styles = StyleSheet.create({
     borderRadius: wp(1),
     backgroundColor: 'transparent',
     alignSelf: 'flex-end',
-
   },
   modalContent: {
     height: hp(12),
-    width: wp(97),
+    width: wp(96.5),
     borderRadius: wp(1),
     backgroundColor: 'white',
     alignSelf: 'flex-end',
