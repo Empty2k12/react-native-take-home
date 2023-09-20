@@ -18,11 +18,11 @@ RCT_EXPORT_METHOD(scheduleNotification:(NSDictionary *)options
     content.title = [RCTConvert NSString:options[@"title"]];
     content.body = [RCTConvert NSString:options[@"body"]];
 
-    // Customize notification content as needed
+  NSString *notificationId = [RCTConvert NSString:options[@"notificationId"]]; // Retrieve the custom notification ID    // Customize notification content as needed
 
-    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"LocalNotification"
-                                                                          content:content
-                                                                          trigger:nil];
+  UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:notificationId // Use the custom notification ID
+                                                                           content:content
+                                                                           trigger:nil];
 
     [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
         if (error) {
