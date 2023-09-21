@@ -100,24 +100,19 @@ const TodoListMain: React.FC = () => {
 
   useEffect(() => {
     if (Platform.OS == 'ios') {
-      const scheduleNotificationForTodo = (
-        todo: Todo,
-        notificationDate: Date,
-      ) => {
+      const scheduleNotificationForTodo = (todo: Todo) => {
         LocalNotificationManager.scheduleNotification({
           title: 'Todo Reminder',
           body: todo.title,
           notificationId: todo.id.toString(),
-          date: notificationDate.getTime(),
         });
       };
 
-      let initialDelay = 1 * 60 * 1000;
+      let initialDelay = 0.1 * 60 * 1000;
 
       todoList.forEach(todo => {
         setTimeout(() => {
-          const notificationDate = new Date();
-          scheduleNotificationForTodo(todo, notificationDate);
+          scheduleNotificationForTodo(todo);
         }, initialDelay);
 
         initialDelay += 1 * 60 * 1000;
