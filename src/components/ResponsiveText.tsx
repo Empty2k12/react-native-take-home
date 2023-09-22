@@ -14,7 +14,6 @@ const ResponsiveText: React.FC<ResponsiveTextProps> = ({
   text,
   style,
   elipsisWidth,
-
   numberOfLines,
 }) => {
   return (

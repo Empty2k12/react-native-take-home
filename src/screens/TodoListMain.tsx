@@ -42,6 +42,8 @@ const TodoListMain: React.FC = () => {
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  //fetchAllTodoList
   const fetchTodosList = async () => {
     setIsLoading(true);
     try {
@@ -62,6 +64,7 @@ const TodoListMain: React.FC = () => {
     }
   };
 
+  //fetch user names to display on todo card
   const fetchUsers = async () => {
     try {
       const res = await APIHandler('get', 'users');
@@ -98,6 +101,7 @@ const TodoListMain: React.FC = () => {
     setIsRefreshing(false);
   };
 
+  //render local notification for all todo list
   useEffect(() => {
     if (Platform.OS == 'ios') {
       const scheduleNotificationForTodo = (todo: Todo) => {
