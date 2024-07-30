@@ -1,0 +1,7 @@
+clean(true)
+
+output_directory("./build")
+
+export_options({
+  method: "ad-hoc",
+})

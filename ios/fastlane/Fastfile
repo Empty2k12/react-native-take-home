@@ -1,0 +1,11 @@
+opt_out_usage
+update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Builds the app"
+  lane :build do
+    gym
+  end
+end

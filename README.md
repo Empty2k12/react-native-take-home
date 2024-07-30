@@ -31,3 +31,14 @@ yarn android
 ```bash
 yarn ios
 ```
+
+## Building
+
+### For iOS
+
+```
+cd ios
+pod deintegrate
+pod install
+CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO fastlane ios build
+```
